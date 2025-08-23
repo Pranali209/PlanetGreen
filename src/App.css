@@ -1,0 +1,22 @@
+@import "tailwindcss";
+ 
+/* Login page background */
+.login-bg {
+	min-height: 100vh;
+	background: linear-gradient(120deg, #f8f8f8 0%, #eaeaea 100%);
+		position: relative;
+		overflow: hidden;
+		background-image: url('./assets/background.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+    }
+    body{
+    font-family: "Inter", sans-serif;
+}
+
+.login-bg > * {
+	position: relative;
+	z-index: 1;
+}
