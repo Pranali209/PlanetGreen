@@ -1,10 +1,51 @@
 import React, { useState } from "react";
 import Logo from '../Component/Logo';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../userSlice";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignUp() {
   const [showTerms, setShowTerms] = useState(false);
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({
+    fullName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+  const [error, setError] = useState("");
+
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!form.fullName || !form.username || !form.email || !form.password || !form.confirmPassword) {
+      setError("All fields are required.");
+        toast.error('All fields are required.', { position: 'top-right' });
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.");
+        toast.error('Passwords do not match.', { position: 'top-right' });
+      return;
+    }
+    dispatch(registerUser({
+      fullName: form.fullName,
+      username: form.username,
+      email: form.email,
+      password: form.password
+    }));
+    setError("");
+    Navigate("/"); // Redirect to login
+      toast.success('Account created successfully!', { position: 'top-right' });
+  };
+
   return (
     <div className="login-bg min-h-screen flex items-center justify-center">
       <div className="bg-black bg-opacity-90 rounded-3xl shadow-lg w-full max-w-2xl p-10 flex flex-col">
@@ -14,7 +55,7 @@ export default function SignUp() {
         </div>
         <p className="text-[#888787]  text-sm mb-6">Sign up to unlock exclusive features.</p>
         <hr className="border-gray-700 mb-6" />
-        <form className="w-full flex flex-col gap-6">
+        <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="flex gap-6 items-center mb-2">
             <div className="bg-[#202020] rounded-lg flex items-center justify-center w-24 h-24">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-gray-500">
@@ -23,41 +64,42 @@ export default function SignUp() {
             </div>
             <div className="flex-1">
               <label className="text-white text-sm mb-1 block">Full Name</label>
-              <input type="text" placeholder="Enter your full name" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
+              <input type="text" name="fullName" value={form.fullName} onChange={handleChange} placeholder="Enter your full name" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
             </div>
           </div>
           <div className="flex gap-6">
             <div className="flex-1">
               <label className="text-white text-sm mb-1 block">Username</label>
-              <input type="text" placeholder="Enter your username" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
+              <input type="text" name="username" value={form.username} onChange={handleChange} placeholder="Enter your username" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
             </div>
             <div className="flex-1">
               <label className="text-white text-sm mb-1 block">Email Address</label>
-              <input type="email" placeholder="Enter your full email" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
+              <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Enter your full email" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
             </div>
           </div>
           <div className="flex gap-6">
             <div className="flex-1">
               <label className="text-white text-sm mb-1 block">Password</label>
-              <input type="password" placeholder="Enter password" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
+              <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="Enter password" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
             </div>
             <div className="flex-1">
               <label className="text-white text-sm mb-1 block">Confirm Password</label>
-              <input type="password" placeholder="Confirm password" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
+              <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} placeholder="Confirm password" className="w-full px-4 py-3 rounded-md bg-[#202020] text-white placeholder-gray-400 focus:outline-none" />
             </div>
           </div>
+          {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
           <div className="flex items-center justify-between gap-4 mt-2">
             <div className="flex items-center gap-2">
-              <input type="checkbox" className="accent-white cursor-pointer" />
-              <span className="text-gray-400 text-sm">I accept the <button type="button" className="underline text-white" onClick={() => setShowTerms(true)}>Terms & Conditions</button></span>
+                <input type="checkbox" className="accent-white cursor-pointer" />
+              <span className="text-gray-400 text-sm">I accept the <button type="button" className="underline text-white cursor-pointer" onClick={() => setShowTerms(true)}>Terms & Conditions</button></span>
             </div>
-            <button type="submit" className="px-8 py-3 rounded-md bg-white text-black font-semibold flex items-center gap-2 cursor-pointer">Create Account <span className="ml-2">→</span></button>
+              <button type="submit" className="px-8 py-3 rounded-md bg-white text-black font-semibold flex items-center gap-2 cursor-pointer">Create Account <span className="ml-2">→</span></button>
           </div>
         </form>
         <hr className="border-gray-700 mt-8 mb-2" />
         <div className="flex justify-between items-center text-gray-400 text-sm">
-          <span>Already have an account? <a onClick={() => Navigate("/")}
-           href="#" className="underline text-white cursor-pointer">Log in</a></span>
+            <span>Already have an account? <a onClick={() => Navigate("/")}
+             href="#" className="underline text-white cursor-pointer">Log in</a></span>
           <span className="text-xs">2025 © Demo Panel | FE</span>
         </div>
       </div>
@@ -75,10 +117,11 @@ export default function SignUp() {
               <p className="mt-3">You represent that you are over the age of 18. The Company does not permit those under 18 to use the Service.</p>
               <p className="mt-3">Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy Policy of the Company. Our Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your personal information when You use the Application or the Website and tells You about Your privacy rights and how the law protects You. Please read Our Privacy Policy carefully before using Our Service.</p>
             </div>
-            <button className="w-full py-2 rounded-md bg-black text-white font-semibold mt-2 cursor-pointer" onClick={() => setShowTerms(false)}>Close</button>
+              <button className="w-full py-2 rounded-md bg-black text-white font-semibold mt-2 cursor-pointer" onClick={() => setShowTerms(false)}>Close</button>
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 }

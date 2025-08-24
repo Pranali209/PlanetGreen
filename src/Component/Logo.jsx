@@ -4,7 +4,7 @@ import LogoImage from '../assets/Logo.svg'
 function Logo() {
     return (
         <div>
-            <img src={LogoImage} alt="Logo" className="h-10 w-auto" />
+                <img src={LogoImage} alt="Logo" className="h-10 w-auto cursor-pointer" />
         </div>
     )
 }

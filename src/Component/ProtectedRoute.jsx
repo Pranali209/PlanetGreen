@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
-import pb from  "../Services/pocketBase";
+import { useSelector } from "react-redux";
 
 export default function ProtectedRoute({ children }) {
-  if (!pb.authStore.isValid) {
+  const currentUser = useSelector((state) => state.user.currentUser);
+  if (!currentUser) {
     return <Navigate to="/" replace />;
   }
   return children;
