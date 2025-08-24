@@ -18,21 +18,26 @@ export default function SignUp() {
     confirmPassword: ""
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
+    setLoading(true);
+    await new Promise(res => setTimeout(res, 900)); // Simulate async
     if (!form.fullName || !form.username || !form.email || !form.password || !form.confirmPassword) {
       setError("All fields are required.");
-        toast.error('All fields are required.', { position: 'top-right' });
+      toast.error('All fields are required.', { position: 'top-right' });
+      setLoading(false);
       return;
     }
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match.");
-        toast.error('Passwords do not match.', { position: 'top-right' });
+      toast.error('Passwords do not match.', { position: 'top-right' });
+      setLoading(false);
       return;
     }
     dispatch(registerUser({
@@ -43,7 +48,8 @@ export default function SignUp() {
     }));
     setError("");
     Navigate("/"); // Redirect to login
-      toast.success('Account created successfully!', { position: 'top-right' });
+    toast.success('Account created successfully!', { position: 'top-right' });
+    setLoading(false);
   };
 
   return (
@@ -57,6 +63,11 @@ export default function SignUp() {
   <p className="text-[#888787] text-xs md:text-sm mb-6">Sign up to unlock exclusive features.</p>
         <hr className="border-gray-700 mb-6" />
         <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
+          {loading && (
+            <div className="flex justify-center items-center mb-2">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+            </div>
+          )}
           <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center mb-2">
             <div className="bg-[#202020] rounded-lg flex items-center justify-center w-16 h-16 md:w-24 md:h-24 mb-2 md:mb-0">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-gray-500">

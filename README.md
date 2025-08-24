@@ -1,12 +1,44 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# PlanetGreen React App
 
-Currently, two official plugins are available:
+This project is built with React and Vite, featuring modern state management, routing, notifications, and styling.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Main Packages Used
 
-## Expanding the ESLint configuration
+- **React**: UI library for building user interfaces
+- **Vite**: Fast build tool and dev server
+- **Redux Toolkit** (`@reduxjs/toolkit`, `react-redux`): State management
+- **React Router DOM** (`react-router-dom`): Routing for SPA navigation
+- **Tailwind CSS** (`tailwindcss`, `@tailwindcss/vite`): Utility-first CSS framework for responsive design
+- **React Toastify** (`react-toastify`): Toast notifications for user feedback
+- **FontAwesome** (`@fortawesome/react-fontawesome`, `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, `@fortawesome/fontawesome-svg-core`): Icon library
+- **PocketBase** (`pocketbase`): Backend service integration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Dev Tools
+
+- **ESLint**: Linting and code quality
+- **@vitejs/plugin-react**: React plugin for Vite
+
+## How to Run
+
+```bash
+npm install
+npm run dev
+```
+
+## Folder Structure
+
+- `src/` - Main source code
+- `src/Pages/` - App pages (Login, SignUp, DashBoard)
+- `src/Component/` - Reusable components
+- `src/Services/` - API and backend services
+
+## Features
+
+- Responsive design for all devices
+- User authentication with persistent login
+- Toast notifications for login, logout, and account creation
+- Protected routes
+
+---
+

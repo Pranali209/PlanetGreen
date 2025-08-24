@@ -13,22 +13,26 @@ export default function Login() {
   const currentUser = useSelector(state => state.user.currentUser);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
+    setLoading(true);
+    await new Promise(res => setTimeout(res, 900)); // Simulate async
     dispatch(loginUser(form));
     if (users.find(u => u.email === form.email && u.password === form.password)) {
       setError("");
       navigate("/dashboard");
-    toast.success('Logged in successfully!', { position: 'top-right' });
+      toast.success('Logged in successfully!', { position: 'top-right' });
     } else {
       setError("Invalid email or password.");
-    toast.error('Invalid email or password.', { position: 'top-right' });
+      toast.error('Invalid email or password.', { position: 'top-right' });
     }
+    setLoading(false);
   };
 
   return (
@@ -38,6 +42,11 @@ export default function Login() {
         <h2 className="text-[#888787] text-2xl font-semibold mb-2 mt-10"><b className="text-white">Log in</b> to your account!</h2>
   <p className="text-[#888787] text-sm mb-6">Enter your email and password to login</p>
         <form className="w-full flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
+          {loading && (
+            <div className="flex justify-center items-center mb-2">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+            </div>
+          )}
           <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Enter email address.." className="w-full px-3 md:px-4 py-2 md:py-3 rounded-md bg-[#202020] text-white placeholder-[#888787] focus:outline-none text-sm md:text-base" />
           <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="Enter Password..." className="w-full px-3 md:px-4 py-2 md:py-3 rounded-md bg-[#202020] text-white placeholder-[#888787] focus:outline-none text-sm md:text-base" />
           <div className="flex items-center mt-4 justify-between w-full text-gray-400 text-sm">
