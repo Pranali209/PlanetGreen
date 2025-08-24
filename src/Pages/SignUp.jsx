@@ -107,10 +107,10 @@ export default function SignUp() {
       </div>
       {/* Terms & Conditions Modal */}
       {showTerms && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="modal-overlay">
           {/* Blur and overlay background */}
-         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
-          <div className="relative bg-white rounded-2xl shadow-2xl max-w-xl w-full p-8 z-10 flex flex-col items-center">
+         
+          <div className="modal-content">
             <h3 className="text-2xl font-bold mb-4 text-left w-full cursor-pointer">Terms & Conditions</h3>
             <div className="text-gray-700 text-base max-h-[60vh] overflow-y-auto mb-6 w-full text-left">
               <p>These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and the Company. These Terms and Conditions set out the rights and obligations of all users regarding the use of the Service.</p>
