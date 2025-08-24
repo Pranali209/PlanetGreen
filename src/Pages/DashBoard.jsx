@@ -4,7 +4,8 @@ import LogoImage from  '../assets/LogoImage.png'
 import Contact from '../assets/contact.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../userSlice';
+import { logoutUser, setCurrentUser } from '../userSlice';
+import pb from '../Services/pocketBase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -24,8 +25,11 @@ import { faBell as faBellRegular, faUser as faUserRegular } from '@fortawesome/f
 export default function DashBoard() {
     const dispatch = useDispatch();
     const handleLogout = () => {
+        pb.authStore.clear();
         dispatch(logoutUser());
+        dispatch(setCurrentUser(null));
         toast.success('Logged out successfully!', { position: 'top-right' });
+        window.location.href = '/';
     };
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-[#fafafa]">

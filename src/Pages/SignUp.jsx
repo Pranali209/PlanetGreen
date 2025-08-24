@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Logo from '../Component/Logo';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../userSlice";
+import pb from '../Services/pocketBase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -40,15 +40,21 @@ export default function SignUp() {
       setLoading(false);
       return;
     }
-    dispatch(registerUser({
-      fullName: form.fullName,
-      username: form.username,
-      email: form.email,
-      password: form.password
-    }));
-    setError("");
-    Navigate("/"); // Redirect to login
-    toast.success('Account created successfully!', { position: 'top-right' });
+    try {
+      await pb.collection('users').create({
+        email: form.email,
+        password: form.password,
+        passwordConfirm: form.confirmPassword,
+        name: form.fullName,
+        username: form.username
+      });
+      setError("");
+      toast.success('Account created successfully!', { position: 'top-right' });
+      Navigate("/"); // Redirect to login
+    } catch (err) {
+      setError("Registration failed. " + (err?.message || ""));
+      toast.error('Registration failed. ' + (err?.message || ""), { position: 'top-right' });
+    }
     setLoading(false);
   };
 
