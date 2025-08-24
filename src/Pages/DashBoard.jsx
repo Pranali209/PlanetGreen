@@ -2,6 +2,10 @@ import React from 'react';
 import Logo from '../Component/Logo';
 import Contact from '../assets/contact.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../userSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
     faHouse,
     faCalendar,
@@ -17,6 +21,11 @@ import {
 import { faBell as faBellRegular, faUser as faUserRegular } from '@fortawesome/free-regular-svg-icons';
 
 export default function DashBoard() {
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+        dispatch(logoutUser());
+        toast.success('Logged out successfully!', { position: 'top-right' });
+    };
     return (
         <div className="flex min-h-screen bg-[#fafafa]">
             {/* Sidebar */}
@@ -34,7 +43,7 @@ export default function DashBoard() {
                     <button className="text-xl cursor-pointer"><FontAwesomeIcon icon={faGear} /></button>
                 </nav>
                 <div className="mt-auto mb-2">
-                    <button className="text-xl cursor-pointer"><FontAwesomeIcon icon={faArrowRightFromBracket} /></button>
+                    <button className="text-xl cursor-pointer" onClick={handleLogout}><FontAwesomeIcon icon={faArrowRightFromBracket} /></button>
                 </div>
             </aside>
             {/* Main Content */}
@@ -69,6 +78,7 @@ export default function DashBoard() {
                 </div>
                 {/* Bottom Bar (optional, for the black bar at the bottom) */}
             </main>
+            <ToastContainer />
         </div>
     );
 }

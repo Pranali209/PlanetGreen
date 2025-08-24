@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   users: [], // Registered users
-  currentUser: null, // Logged in user
+  currentUser: JSON.parse(localStorage.getItem('currentUser')) || null, // Persisted user
 };
 
 const userSlice = createSlice({
@@ -17,9 +17,15 @@ const userSlice = createSlice({
         u => u.email === action.payload.email && u.password === action.payload.password
       );
       state.currentUser = user || null;
+      if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('currentUser');
+      }
     },
     logoutUser: (state) => {
-      state.currentUser = null;
+  state.currentUser = null;
+  localStorage.removeItem('currentUser');
     },
   },
 });
