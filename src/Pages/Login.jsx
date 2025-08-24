@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import Logo from '../Component/Logo';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../userSlice";
+import pb from '../Services/pocketBase';
+import { setCurrentUser } from '../userSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const users = useSelector(state => state.user.users);
-  const currentUser = useSelector(state => state.user.currentUser);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,13 +21,15 @@ export default function Login() {
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
-    await new Promise(res => setTimeout(res, 900)); // Simulate async
-    dispatch(loginUser(form));
-    if (users.find(u => u.email === form.email && u.password === form.password)) {
+    try {
+      const authData = await pb.collection('users').authWithPassword(form.email, form.password);
+  localStorage.setItem('currentUser', JSON.stringify(authData.record));
+  localStorage.setItem('pb_token', pb.authStore.token);
+  dispatch(setCurrentUser(authData.record));
       setError("");
-      navigate("/dashboard");
       toast.success('Logged in successfully!', { position: 'top-right' });
-    } else {
+      navigate("/dashboard");
+    } catch (err) {
       setError("Invalid email or password.");
       toast.error('Invalid email or password.', { position: 'top-right' });
     }
